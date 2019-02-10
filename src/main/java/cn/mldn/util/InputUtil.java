@@ -1,5 +1,7 @@
 package cn.mldn.util;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
@@ -18,17 +20,19 @@ public class InputUtil {
      */
     public static String getString(String prompt) {
         String returnData = null ;  // 进行接收数据的返回
-        boolean flag = true ; // 进行数据验证的基础逻辑判断
-        while(flag) {
+        boolean flag=false;// 进行数据验证的基础逻辑判断
+        while (!flag){
             System.out.print(prompt);
             try {
-                returnData = KEYBOARD_INPUT.readLine();    // 通过键盘读取数据
-                if (returnData == null || "".equals(returnData)) {
+                returnData = KEYBOARD_INPUT.readLine(); // 通过键盘读取数据
+                flag=StringUtils.isEmpty(returnData);
+                if (flag){
                     System.err.println("输入的数据不允许为空！");
-                } else {
-                    flag = false ; // 结束循环
                 }
-            } catch (Exception e) {
+                else{
+                    flag=true;
+                }
+            } catch (Exception e)  {
                 System.err.println("输入的数据错误！");
             }
         }
