@@ -24,7 +24,6 @@ public class NIOEchoServer {
  */
 class SocketClientChannelThread implements Runnable {
     private SocketChannel clientChannel ; // 客户端的信息
-    private boolean flag  ; // 循环处理的标记
     public SocketClientChannelThread(SocketChannel clientChannel) {
         this.clientChannel = clientChannel ;
         System.out.println("服务器端连接成功，可以与服务器端进行数据的交互操作...");
@@ -34,6 +33,7 @@ class SocketClientChannelThread implements Runnable {
         // NIO是基于Buffer缓冲操作实现的功能，需要将输入的内容保存在缓存之中
         ByteBuffer buffer = ByteBuffer.allocate(50) ; // 开辟一个50大小的缓存空间
         try {
+            boolean flag;// 循环处理的标记
             do {
                 buffer.clear() ; // 清空缓存操作，可以进行该缓存空间的重复使用
                 int readCount = this.clientChannel.read(buffer) ;  // 服务器端读取客户端发送来的内容

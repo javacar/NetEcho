@@ -82,10 +82,7 @@ class AIOClientThread implements Runnable {
         buffer.put(msg.getBytes()) ;
         buffer.flip() ;
         this.clientChannel.write(buffer,buffer,new ClientWriteHandler(this.clientChannel,this.latch)) ;
-        if ("exit".equalsIgnoreCase(msg)) {
-            return false ;
-        }
-        return true ;
+        return !"exit".equalsIgnoreCase(msg);
     }
 }
 
@@ -95,7 +92,7 @@ public class AIOEchoClient {
         AIOClientThread client = new AIOClientThread() ;
         new Thread(client).start();
         while(client.sendMessage(InputUtil.getString("请输入要发送的信息："))) {
-            ;
         }
+
     }
 }
