@@ -29,9 +29,9 @@ class EchoServerHandle implements AutoCloseable {
                             String inputData = scan.next(); // 获得输入数据
                             if ("exit".equalsIgnoreCase(inputData)) {   // 信息结束
                                 clientFlag = false ; // 结束内部的循环
-                                out.println("【ECHO】Bye Bye ... kiss"); // 一定需要提供有一个换行机制，否则Scanner不好读取
+                                out.println("【ECHO】 Bye Bye ... kiss"); // 一定需要提供有一个换行机制，否则Scanner不好读取
                             } else {
-                                out.println("【ECHO】" + inputData); // 回应信息
+                                out.println("【ECHO】 " + inputData); // 回应信息
                             }
                         }
                     }
