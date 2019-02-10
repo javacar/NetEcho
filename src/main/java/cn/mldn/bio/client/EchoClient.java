@@ -23,8 +23,9 @@ class EchoClientHandle implements AutoCloseable {
         while(flag) {
             String data = InputUtil.getString("请输入要发送的数据信息：") ;
             out.println(data); // 先把内容发送到服务器端上
+            out.flush();
             if ("exit".equalsIgnoreCase(data)) {
-                flag = false ; // 结束循环s
+                flag = false ; // 结束循环
             }
             if (scan.hasNext()) {
                 System.out.println(scan.next());
