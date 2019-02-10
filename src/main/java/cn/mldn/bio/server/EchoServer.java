@@ -19,7 +19,7 @@ class EchoServerHandle implements AutoCloseable {
     private void clientConnect() throws Exception {
         while (true) {
             Socket client = this.serverSocket.accept(); // 等待客户端连接
-            Thread clientThread = new Thread(() -> {
+         new Thread(() -> {
                 try {
                     Scanner scan = new Scanner(client.getInputStream());// 服务器端输入为客户端输出
                     PrintStream out = new PrintStream(client.getOutputStream());//服务器端的输出为客户端输入
@@ -38,8 +38,7 @@ class EchoServerHandle implements AutoCloseable {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            });
-            clientThread.start(); // 启动多线程
+            }).start();// 启动多线程
         }
     }
 
