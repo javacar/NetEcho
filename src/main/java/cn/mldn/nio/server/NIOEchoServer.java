@@ -24,7 +24,7 @@ public class NIOEchoServer {
  */
 class SocketClientChannelThread implements Runnable {
     private SocketChannel clientChannel ; // 客户端的信息
-    private boolean flag = true ; // 循环处理的标记
+    private boolean flag  ; // 循环处理的标记
     public SocketClientChannelThread(SocketChannel clientChannel) {
         this.clientChannel = clientChannel ;
         System.out.println("服务器端连接成功，可以与服务器端进行数据的交互操作...");
@@ -34,7 +34,7 @@ class SocketClientChannelThread implements Runnable {
         // NIO是基于Buffer缓冲操作实现的功能，需要将输入的内容保存在缓存之中
         ByteBuffer buffer = ByteBuffer.allocate(50) ; // 开辟一个50大小的缓存空间
         try {
-            while(this.flag) {
+            do {
                 buffer.clear() ; // 清空缓存操作，可以进行该缓存空间的重复使用
                 int readCount = this.clientChannel.read(buffer) ;  // 服务器端读取客户端发送来的内容
                 // 将缓冲区之中保存的内容转位字节数组之后进行存储
@@ -42,15 +42,15 @@ class SocketClientChannelThread implements Runnable {
                 System.out.println("【服务器端接收消息】" + readMessage); // 输出一下提示信息
                 // 在进行整个的通讯过程里面，分隔符是一个绝对重要的概念，如果不能够很好的处理分隔符，那么无法进行有效通讯
                 String writeMessage = "【ECHO】" + readMessage + "\n"; // 进行消息的回应处理
-                if ("exit".equalsIgnoreCase(readMessage)) {
+                flag="exit".equalsIgnoreCase(readMessage);
+                if (flag){
                     writeMessage = "【ECHO】Bye Byte ... kiss"  ; // 结束消息
-                    this.flag = false ; // 要结束当前的循环操作
-                }   // 现在的数据是在字符串之中，如果要回应内容，需要将内容保存在Buffer之中
+                }// 现在的数据是在字符串之中，如果要回应内容，需要将内容保存在Buffer之中
                 buffer.clear() ; // 将已经保存的内容（内容已经处理完毕）清除
                 buffer.put(writeMessage.getBytes()) ; // 保存回应信息
                 buffer.flip() ; // 重置缓冲区
                 this.clientChannel.write(buffer) ;
-            }
+            }while (!flag);
             this.clientChannel.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -60,7 +60,7 @@ class SocketClientChannelThread implements Runnable {
 
 class EchoServerHandle implements AutoCloseable {    // 定义服务器端的服务处理类
     private ExecutorService executorService ;
-    private ServerSocketChannel serverSocketChannel ; // 服务器端的通讯通道
+    private final ServerSocketChannel serverSocketChannel ; // 服务器端的通讯通道
     private Selector selector ;
     private SocketChannel clientChannel ; // 客户端的信息
     public EchoServerHandle() throws Exception  {
