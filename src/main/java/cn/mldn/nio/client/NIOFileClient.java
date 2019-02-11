@@ -32,8 +32,7 @@ class FileClientHandle implements AutoCloseable {
         }
         if (num == -1) {
             fileChannel.close();
-            clientChannel.shutdownOutput();
-            clientChannel.close();
+
         }
 
 
@@ -41,6 +40,7 @@ class FileClientHandle implements AutoCloseable {
 
     @Override
     public void close() throws Exception {
+        this.clientChannel.shutdownOutput();
         this.clientChannel.close();
     }
 }
