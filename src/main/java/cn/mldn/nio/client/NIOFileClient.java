@@ -20,8 +20,12 @@ class FileClientHandle implements AutoCloseable {
     }
 
     public void accessServer() throws Exception {     // 访问服务器端
+
         FileChannel fileChannel = new FileInputStream("D:\\BaiduNetdiskDownload\\个人头像.jpg").getChannel();
-        ByteBuffer buffer = ByteBuffer.allocate(100);
+        ByteBuffer buffer = ByteBuffer.allocate(1024 * 1024);
+        buffer.put("hello".getBytes());
+        buffer.flip() ; // 重置缓冲区
+        this.clientChannel.write(buffer) ; // 发送数据内容
         clientChannel.read(buffer);
         buffer.clear();
         int num = 0;
@@ -32,15 +36,15 @@ class FileClientHandle implements AutoCloseable {
         }
         if (num == -1) {
             fileChannel.close();
-
+            clientChannel.shutdownOutput();
         }
+
 
 
     }
 
     @Override
     public void close() throws Exception {
-        this.clientChannel.shutdownOutput();
         this.clientChannel.close();
     }
 }

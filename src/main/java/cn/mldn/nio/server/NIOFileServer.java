@@ -42,6 +42,10 @@ class FileServerHandle implements AutoCloseable {// 定义服务器端的服务�
                 if(selectionKey.isAcceptable()) {  // 该通道为接收状态
                     this.clientChannel = this.serverSocketChannel.accept() ; // 等待连接
                     if (this.clientChannel != null) {  // 当前有连接
+                        int readCount = this.clientChannel.read(buffer) ;  // 服务器端读取客户端发送来的内容
+                        // 将缓冲区之中保存的内容转位字节数组之后进行存储
+                        String readMessage = new String(buffer.array(),0,readCount).trim() ;
+                        System.out.println( readMessage); // 输出一下提示信息
                         clientChannel.configureBlocking(false);
                         SelectionKey key1 = clientChannel.register(selector, SelectionKey.OP_READ);
                         FileChannel fileChannel = new FileOutputStream("D:\\log\\个人头像.jpg").getChannel();
@@ -82,11 +86,11 @@ class FileServerHandle implements AutoCloseable {// 定义服务器端的服务�
             System.out.println("上传完毕");
             key.cancel();
         }
+        socketChannel.close();
     }
 
     @Override
     public void close() throws Exception {
-        //      this.executorService.shutdown(); // 关闭线程池
         this.serverSocketChannel.close(); // 关闭服务器端
     }
 }
