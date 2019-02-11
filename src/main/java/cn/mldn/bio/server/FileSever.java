@@ -44,7 +44,6 @@ class FileServerHandle  implements AutoCloseable{
                    catch (Exception e){
                        e.printStackTrace();
                    }
-
                }
 
            }).start();

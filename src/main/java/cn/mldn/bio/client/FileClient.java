@@ -11,7 +11,7 @@ import java.net.Socket;
 class FileClientHandle  implements AutoCloseable {
     private Socket client;
     public FileClientHandle() throws Exception {
-        client=new Socket(ServerInfo.ECHO_SERVER_HOST, ServerInfo.PORT);
+        client=new Socket(ServerInfo.SERVER_HOST, ServerInfo.PORT);
         System.out.println("已经成功的连接到了服务器端，可以进行消息的发送处理。");
         this.accessServer();
     }

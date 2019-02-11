@@ -12,9 +12,7 @@ import java.nio.channels.SocketChannel;
  */
 public class NIOEchoClient {
     public static void main(String[] args) throws Exception {
-        try(EchoClientHandle handle = new EchoClientHandle()) {
-
-        } catch (Exception e) {}
+        new EchoClientHandle();
     }
 }
 
@@ -23,7 +21,7 @@ class EchoClientHandle implements AutoCloseable {
     public EchoClientHandle() throws Exception {
         this.clientChannel = SocketChannel.open() ; // 创建一个客户端的通道实例
         // 设置要连接的主机信息，包括主机名称以及端口号
-        this.clientChannel.connect(new InetSocketAddress(ServerInfo.ECHO_SERVER_HOST,ServerInfo.PORT)) ;
+        this.clientChannel.connect(new InetSocketAddress(ServerInfo.SERVER_HOST,ServerInfo.PORT)) ;
         this.accessServer();
     }
     public void accessServer() throws Exception {    // 访问服务器端

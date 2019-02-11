@@ -61,7 +61,7 @@ class AIOClientThread implements Runnable {
     private CountDownLatch latch ;
     public AIOClientThread() throws Exception {
         this.clientChannel = AsynchronousSocketChannel.open() ; // 打开客户端的Channel
-        this.clientChannel.connect(new InetSocketAddress(ServerInfo.ECHO_SERVER_HOST,ServerInfo.PORT)) ;
+        this.clientChannel.connect(new InetSocketAddress(ServerInfo.SERVER_HOST,ServerInfo.PORT)) ;
         this.latch = new CountDownLatch(1) ;
     }
     @Override
