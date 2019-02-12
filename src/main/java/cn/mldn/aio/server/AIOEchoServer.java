@@ -63,7 +63,9 @@ class EchoHandler implements CompletionHandler<Integer,ByteBuffer> {
     public void failed(Throwable exc, ByteBuffer attachment) {
         try {
             this.clientChannel.close(); // 关闭通道
-        } catch(Exception e) {}
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 }
 
@@ -110,7 +112,9 @@ class AIOServerThread implements Runnable { // 是进行AIO处理的线程类
         this.serverChannel.accept(this,new AcceptHandler()) ; // 等待客户端连接
         try {
             this.latch.await(); // 进入等待时机
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
 

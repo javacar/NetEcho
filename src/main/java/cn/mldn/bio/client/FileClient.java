@@ -19,9 +19,9 @@ class FileClientHandle  implements AutoCloseable {
         byte[] bytes = new byte[1024];
         int length = 0;
         DataOutputStream dos = new DataOutputStream(client.getOutputStream());
-        JFileChooser fd = new JFileChooser();
-        fd.showOpenDialog(null);
-        File file=fd.getSelectedFile();
+        JFileChooser jd = new JFileChooser();
+        jd.showOpenDialog(null);
+        File file=jd.getSelectedFile();
         FileInputStream fis=null;
         if (file.exists()){
             dos.writeUTF(file.getName());

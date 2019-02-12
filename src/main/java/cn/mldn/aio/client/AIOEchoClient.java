@@ -69,7 +69,9 @@ class AIOClientThread implements Runnable {
         try {
             this.latch.await();
             this.clientChannel.close();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -93,6 +95,5 @@ public class AIOEchoClient {
         new Thread(client).start();
         while(client.sendMessage(InputUtil.getString("请输入要发送的信息："))) {
         }
-
     }
 }
