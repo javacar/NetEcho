@@ -3,6 +3,8 @@ package cn.mldn.nio.client;
 import cn.mldn.bio.client.FileClient;
 import cn.mldn.commons.ServerInfo;
 
+import javax.swing.*;
+import java.io.File;
 import java.io.FileInputStream;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -20,10 +22,12 @@ class FileClientHandle implements AutoCloseable {
     }
 
     public void accessServer() throws Exception {     // 访问服务器端
-
-        FileChannel fileChannel = new FileInputStream("D:\\BaiduNetdiskDownload\\个人头像.jpg").getChannel();
+        JFileChooser jd=new JFileChooser();
+        jd.showOpenDialog(null);
+        File file=jd.getSelectedFile();
+        FileChannel fileChannel = new FileInputStream(file).getChannel();
         ByteBuffer buffer = ByteBuffer.allocate(1024 * 1024);
-        buffer.put("hello".getBytes());
+        buffer.put(file.getName().getBytes());
         buffer.flip() ; // 重置缓冲区
         this.clientChannel.write(buffer) ; // 发送数据内容
         clientChannel.read(buffer);

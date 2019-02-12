@@ -44,11 +44,10 @@ class FileServerHandle implements AutoCloseable {// 定义服务器端的服务�
                     if (this.clientChannel != null) {  // 当前有连接
                         int readCount = this.clientChannel.read(buffer) ;  // 服务器端读取客户端发送来的内容
                         // 将缓冲区之中保存的内容转位字节数组之后进行存储
-                        String readMessage = new String(buffer.array(),0,readCount).trim() ;
-                        System.out.println( readMessage); // 输出一下提示信息
+                        String fileName = new String(buffer.array(),0,readCount).trim() ;
                         clientChannel.configureBlocking(false);
                         SelectionKey key1 = clientChannel.register(selector, SelectionKey.OP_READ);
-                        FileChannel fileChannel = new FileOutputStream("D:\\log\\个人头像.jpg").getChannel();
+                        FileChannel fileChannel = new FileOutputStream("D:\\log\\"+fileName).getChannel();
                         fileMap.put(key1, fileChannel);
                         System.out.println(clientChannel.getRemoteAddress() + "连接成功...");
                         clientChannel.write(buffer);
