@@ -69,26 +69,6 @@ class EchoHandler implements CompletionHandler<Integer,ByteBuffer> {
     }
 }
 
-/**
- * 1、实现客户端连接回调的处理操作
- */
-class AcceptHandler implements CompletionHandler<AsynchronousSocketChannel,AIOServerThread> {
-
-    @Override
-    public void completed(AsynchronousSocketChannel result, AIOServerThread attachment) {
-        attachment.getServerChannel().accept(attachment,this) ; // 接收连接对象
-        ByteBuffer buffer = ByteBuffer.allocate(50) ;
-        result.read(buffer,buffer,new EchoHandler(result));
-    }
-
-    @Override
-    public void failed(Throwable exc, AIOServerThread attachment) {
-        System.out.println("服务器端客户端连接失败 ...");
-        attachment.getLatch().countDown(); // 恢复执行
-
-    }
-}
-
 class AIOServerThread implements Runnable { // 是进行AIO处理的线程类
     private AsynchronousServerSocketChannel serverChannel ;
     private CountDownLatch latch ;  // 进行线程等待操作
@@ -109,7 +89,22 @@ class AIOServerThread implements Runnable { // 是进行AIO处理的线程类
 
     @Override
     public void run() {
-        this.serverChannel.accept(this,new AcceptHandler()) ; // 等待客户端连接
+        /**
+         * 1、实现客户端连接回调的处理操作
+         */
+        this.serverChannel.accept(this, new CompletionHandler<AsynchronousSocketChannel, AIOServerThread>() {   // 等待客户端连接
+            @Override
+            public void completed(AsynchronousSocketChannel result, AIOServerThread attachment) {
+                attachment.getServerChannel().accept(attachment,this) ; // 接收连接对象
+                ByteBuffer buffer = ByteBuffer.allocate(50) ;
+                result.read(buffer,buffer,new EchoHandler(result));
+            }
+            @Override
+            public void failed(Throwable exc, AIOServerThread attachment) {
+                System.out.println("服务器端客户端连接失败 ...");
+                attachment.getLatch().countDown(); // 恢复执行
+            }
+        });
         try {
             this.latch.await(); // 进入等待时机
         } catch (Exception e) {
